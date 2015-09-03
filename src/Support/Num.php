@@ -1,6 +1,6 @@
 <?php
 
-namespace Peaches\Support;
+namespace Castiron\Peaches\Support;
 
 class Num
 {

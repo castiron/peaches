@@ -1,8 +1,8 @@
 <?php
 
-namespace Peaches\Tests\Support;
+namespace Castiron\Peaches\Tests\Support;
 
-use Peaches\Support\Str;
+use Castiron\Peaches\Support\Str;
 
 class StrTest extends \PHPUnit_Framework_TestCase
 {

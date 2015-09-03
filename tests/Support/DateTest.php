@@ -1,6 +1,6 @@
 <?php
 
-namespace Peaches\Tests\Support;
+namespace Castiron\Peaches\Tests\Support;
 
 class DateTest extends \PHPUnit_Framework_TestCase
 {

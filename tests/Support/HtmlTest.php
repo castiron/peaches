@@ -1,8 +1,8 @@
 <?php
 
-namespace Peaches\Tests\Support;
+namespace Castiron\Peaches\Tests\Support;
 
-use Peaches\Support\Html;
+use Castiron\Peaches\Support\Html;
 
 class HtmlTest extends \PHPUnit_Framework_TestCase
 {

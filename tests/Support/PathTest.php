@@ -1,8 +1,8 @@
 <?php
 
-namespace Peaches\Tests\Support;
+namespace Castiron\Peaches\Tests\Support;
 
-use Peaches\Support\Path;
+use Castiron\Peaches\Support\Path;
 
 class PathTest extends \PHPUnit_Framework_TestCase
 {
