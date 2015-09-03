@@ -1,0 +1,16 @@
+{
+  "name": "castiron/peaches",
+  "description": "A myriad of framework agnostic PHP utilities",
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.5.9"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.7.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Castiron\\": "src/"
+    }
+  }
+}
