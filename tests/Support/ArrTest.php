@@ -1,9 +1,9 @@
 <?php
 
-namespace Castiron\Tests\Support;
+namespace Peaches\Tests\Support;
 
-use Castiron\Support\Arr;
-use Castiron\Support\Num;
+use Peaches\Support\Arr;
+use Peaches\Support\Num;
 
 class ArrTest extends \PHPUnit_Framework_TestCase
 {

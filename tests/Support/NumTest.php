@@ -1,8 +1,8 @@
 <?php
 
-namespace Castiron\Tests\Support;
+namespace Peaches\Tests\Support;
 
-use Castiron\Support\Num;
+use Peaches\Support\Num;
 
 class NumTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Castiron\Support;
+namespace Peaches\Support;
 
 class Date
 {

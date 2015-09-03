@@ -1,6 +1,6 @@
 <?php
 
-namespace Castiron\Tests\Support;
+namespace Peaches\Tests\Support;
 
 class DirTest extends \PHPUnit_Framework_TestCase
 {
