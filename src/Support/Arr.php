@@ -91,6 +91,20 @@ class Arr
         }, $array);
     }
 
+    /**
+     * Swaps two values in an array by key
+     *
+     * @param array $array
+     * @param mixed $alphaKey
+     * @param mixed $betaKey
+     */
+    public static function swapByKeys(array &$array, $alphaKey, $betaKey)
+    {
+        $tmp = $array[$alphaKey];
+        $array[$alphaKey] = $array[$betaKey];
+        $array[$betaKey] = $tmp;
+    }
+
 
 
     // FINDING ----------------------------------------------------------------------------

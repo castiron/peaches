@@ -334,6 +334,13 @@ class ArrTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], Arr::flatten($arr));
     }
 
+    public function testSwapByKeys()
+    {
+        $arr = [1,2,3,4,5,6];
+        Arr::swapByKeys($arr, 1, 2);
+        $this->assertEquals([1,3,2,4,5,6], $arr);
+    }
+
     /**
      * @param callable $callable
      */
