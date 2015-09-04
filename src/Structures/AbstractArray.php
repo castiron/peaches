@@ -1,7 +1,6 @@
 <?php
 
-namespace CIC\Cicbase\Structures;
-
+namespace Castiron\Peaches\Structures;
 
 /**
  * A basic class that iterates through an array. This is

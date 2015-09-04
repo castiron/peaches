@@ -1,6 +1,6 @@
 <?php
 
-namespace CIC\Cicbase\Structures;
+namespace Castiron\Peaches\Structures;
 
 /**
  * A basic Set implementation. Simply uses php array keys as hashes,
