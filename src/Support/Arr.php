@@ -686,16 +686,41 @@ class Arr
      * but in nested arrays you don't know if the array you're
      * adding to has been initialized yet. This helps.
      *
+     * You can also do nested appends:
+     *
+     * Arr::safeAppend('grandma', 'mom', 'daughter', 'Sara');
+     *
+     * becomes: ['grandma' => ['mom' => ['daughter' => ['Sarah']]]]
+     *
+     *
      * @param array $array
      * @param mixed $index
      * @param null|mixed $value
+     * @return array
      */
     public static function safeAppend(array &$array, $index, $value = null)
     {
         if (!isset($array[$index]) || !is_array($array[$index])) {
             $array[$index] = [];
         }
-        $array[$index][] = $value;
+
+        // Handling nested values iteratively instead of recursively
+        // because trouble with call_user_func_array and reference variables
+        $args = func_get_args();
+
+        $keys = array_slice($args, 1);
+        $index = array_shift($keys);
+        $lastValue = array_pop($keys);
+        $currentArray = &$array[$index];
+        foreach ($keys as $key) {
+            if (!isset($currentArray[$key]) || !is_array($currentArray[$key])) {
+                $currentArray[$key] = [];
+            }
+            $currentArray = &$currentArray[$key];
+        }
+
+        $currentArray[] = $lastValue;
+        return $array;
     }
 
 
