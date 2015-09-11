@@ -350,6 +350,22 @@ class ArrTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['howdy' => ['hello' => ['greetings' => ['salutations', 'good days']]]], $arr);
     }
 
+    public function testSafelySets()
+    {
+        $arr = [];
+        Arr::safeSet($arr, 'howdy', 'hello');
+        $this->assertEquals(['howdy' => 'hello'], $arr);
+    }
+
+    public function testSafelySetsDeeply()
+    {
+        $arr = [];
+        Arr::safeSet($arr, 'howdy', 'hello', 'greetings', 'salutations');
+        $this->assertEquals(['howdy' => ['hello' => ['greetings' => 'salutations']]], $arr);
+        Arr::safeSet($arr, 'howdy', 'hello', 'greetings', 'good days');
+        $this->assertEquals(['howdy' => ['hello' => ['greetings' => 'good days']]], $arr);
+    }
+
 
     public function testSwapByKeys()
     {
