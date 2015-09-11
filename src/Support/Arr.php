@@ -692,7 +692,7 @@ class Arr
      */
     public static function safeAppend(array &$array, $index, $value = null)
     {
-        if (!is_array($array[$index])) {
+        if (!isset($array[$index]) || !is_array($array[$index])) {
             $array[$index] = [];
         }
         $array[$index][] = $value;
