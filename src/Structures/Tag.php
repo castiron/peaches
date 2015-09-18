@@ -13,6 +13,7 @@ class Tag
 {
     protected $attributes = [];
     protected $name = '';
+    protected $body = '';
     protected $children = [];
 
     public function __construct($name, $attributes = [])
@@ -58,11 +59,18 @@ class Tag
         return $t;
     }
 
-
+    public function body($str = null)
+    {
+        if (count(func_get_args()) == 1) {
+            $this->body = $str;
+            return $this;
+        }
+        return $this->body;
+    }
 
     public function __toString()
     {
-        $contents = '';
+        $contents = $this->body;
         foreach ($this->children as $child) {
             $contents .= (string) $child;
         }
