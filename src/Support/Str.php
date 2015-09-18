@@ -75,11 +75,11 @@ class Str
      * English _is_ predictable! mostly.
      *
      * Examples
-     * ($x = 3).' '.Arr::pluralize($x, 'dog')                    # "3 dogs"
-     * ($x = 1).' '.Arr::pluralize($x, 'banana')                 # "1 banana"
-     * ($x = 6).' '.Arr::pluralize($x, 'moon', 'moons ago')      # "6 moons ago"
-     * ($x = 1).' '.Arr::pluralize($x, 'moon', 'moons ago')      # "1 moon"
-     * ($x = 5).' '.Arr::pluralize($x, 'deer')                   # "5 deer"
+     * ($x = 3).' '.Str::pluralize($x, 'dog')                    # "3 dogs"
+     * ($x = 1).' '.Str::pluralize($x, 'banana')                 # "1 banana"
+     * ($x = 6).' '.Str::pluralize($x, 'moon', 'moons ago')      # "6 moons ago"
+     * ($x = 1).' '.Str::pluralize($x, 'moon', 'moons ago')      # "1 moon"
+     * ($x = 5).' '.Str::pluralize($x, 'deer')                   # "5 deer"
      *
      * @param integer $count
      * @param string $singleStr
