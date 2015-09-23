@@ -114,7 +114,7 @@ class Arr
      * @param array $array
      * @param mixed $key
      */
-    public static function moveToFirst(array &$array, $key)
+    public static function moveToFirstByKey(array &$array, $key)
     {
         if (!isset($array[$key])) return;
         $val = $array[$key];
