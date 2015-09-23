@@ -374,6 +374,13 @@ class ArrTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([1,3,2,4,5,6], $arr);
     }
 
+    public function testMoveToFirst()
+    {
+        $arr = ['a' => 1, 'b' => 2, 'c' => 3];
+        Arr::moveToFirst($arr, 'b');
+        $this->assertEquals(['b' => 2, 'a' => 1, 'c' => 3], $arr);
+    }
+
     /**
      * @param callable $callable
      */

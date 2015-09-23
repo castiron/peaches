@@ -92,7 +92,9 @@ class Arr
     }
 
     /**
-     * Swaps two values in an array by key
+     * Swaps two values in an array by key.
+     *
+     * $betaKey's value will have $alphaKey's value and vice versa.
      *
      * @param array $array
      * @param mixed $alphaKey
@@ -103,6 +105,21 @@ class Arr
         $tmp = $array[$alphaKey];
         $array[$alphaKey] = $array[$betaKey];
         $array[$betaKey] = $tmp;
+    }
+
+    /**
+     * Moves an element to the beginning of the array while maintaining
+     * the association between the key and the value.
+     *
+     * @param array $array
+     * @param mixed $key
+     */
+    public static function moveToFirst(array &$array, $key)
+    {
+        if (!isset($array[$key])) return;
+        $val = $array[$key];
+        unset($array[$key]);
+        $array = array_merge([$key => $val], $array);
     }
 
 
