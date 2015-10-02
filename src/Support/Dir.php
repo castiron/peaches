@@ -2,7 +2,8 @@
 
 namespace Castiron\Peaches\Support;
 
-class Dir {
+class Dir
+{
 
     /**
      * Returns an array of files and directories without "." or "..".

@@ -45,6 +45,24 @@ class Arr
     }
 
 
+
+
+    // SORTING ----------------------------------------------------------------------------
+
+    public static function sortBy(array &$array, $key)
+    {
+        $accessor = Obj::accessor($key);
+        uasort($array, function ($a, $b) use ($accessor) {
+           return $accessor($a) < $accessor($b) ? -1 : 1;
+        });
+        return $array;
+    }
+
+
+
+
+    // VISITING ---------------------------------------------------------------------------
+
     /**
      * Apply a function to all keys of an array.
      *
@@ -67,29 +85,23 @@ class Arr
     }
 
     /**
-     * @param array $array
-     * @return array
-     */
-    public static function flatten(array $array) {
-        $out = [];
-        array_walk_recursive($array, function($a) use (&$out) { $out[] = $a; });
-        return $out;
-    }
-
-    /**
-     * Apply a method to each object in an array.
+     * Apply a method to each object in an array and get the results as an array.
      *
      * @param array $array
      * @param string $method
-     * @param array $args
      * @return array
      */
-    public static function mapMethod(array $array, $method, $args = [])
+    public static function mapMethod(array $array, $method)
     {
-        return array_map(function($obj) use ($method, $args) {
-            return call_user_func_array([$obj, $method], $args);
-        }, $array);
+        $args = array_slice(func_get_args(), 1);
+        $accessor = call_user_func_array([Obj::class, 'accessor'], $args);
+        return array_map($accessor, $array);
     }
+
+
+
+
+    // ARRANGING ---------------------------------------------------------------------------
 
     /**
      * Swaps two values in an array by key.
@@ -121,6 +133,17 @@ class Arr
         unset($array[$key]);
         $array = array_merge([$key => $val], $array);
     }
+
+    /**
+     * @param array $array
+     * @return array
+     */
+    public static function flatten(array $array) {
+        $out = [];
+        array_walk_recursive($array, function($a) use (&$out) { $out[] = $a; });
+        return $out;
+    }
+
 
 
 

@@ -381,6 +381,45 @@ class ArrTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['b' => 2, 'a' => 1, 'c' => 3], $arr);
     }
 
+    public function testMapMethod()
+    {
+        $arr = [
+            \DateTime::createFromFormat('j-M-Y', '15-Feb-2009'),
+            \DateTime::createFromFormat('j-M-Y', '10-Feb-2009'),
+            \DateTime::createFromFormat('j-M-Y', '05-Feb-2009'),
+        ];
+        $days = Arr::mapMethod($arr, 'format', 'j');
+        $this->assertEquals(['15','10','5'], $days);
+    }
+
+    public function testMapMethodCallable()
+    {
+        list($b1, $b2, $b3) = [new \stdClass, new \stdClass, new \stdClass];
+        $b1->book = 4;
+        $b2->book = 8;
+        $b3->book = 10;
+        $arr = [$b1, $b2, $b3];
+        $books = Arr::mapMethod($arr, 'book');
+        $this->assertEquals([4,8,10], $books);
+    }
+
+    public function testSortBy()
+    {
+        $start = [
+            'carol' => ['id' => 4],
+            'anna'  => ['id' => 2],
+            'betty' => ['id' => 3],
+        ];
+        $end = [
+            'anna'  => ['id' => 2],
+            'betty' => ['id' => 3],
+            'carol' => ['id' => 4],
+        ];
+
+        $res = Arr::sortBy($start, 'id');
+        $this->assertEquals($res, $end);
+    }
+
     /**
      * @param callable $callable
      */
