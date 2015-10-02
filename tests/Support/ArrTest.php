@@ -216,8 +216,8 @@ class ArrTest extends \PHPUnit_Framework_TestCase
         $arr      = array('one.' => 1, 'more.' => array('two.' => 2));
         $expected = array('one'  => 1, 'more'  => array('two'  => 2));
         $func = function ($key) { return rtrim($key, '.'); };
-        Arr::walkKeysRecursive($arr, $func);
-        $this->assertEquals($expected, $arr);
+        $result = Arr::walkKeysRecursive($arr, $func);
+        $this->assertEquals($expected, $result);
     }
 
     /** @test */
@@ -337,41 +337,41 @@ class ArrTest extends \PHPUnit_Framework_TestCase
     public function testSafelyAppends()
     {
         $arr = [];
-        Arr::safeAppend($arr, 'howdy', 'hello');
-        $this->assertEquals(['howdy' => ['hello']], $arr);
+        $result = Arr::safeAppend($arr, 'howdy', 'hello');
+        $this->assertEquals(['howdy' => ['hello']], $result);
     }
 
     public function testSafelyAppendsDeeply()
     {
         $arr = [];
-        Arr::safeAppend($arr, 'howdy', 'hello', 'greetings', 'salutations');
-        $this->assertEquals(['howdy' => ['hello' => ['greetings' => ['salutations']]]], $arr);
-        Arr::safeAppend($arr, 'howdy', 'hello', 'greetings', 'good days');
-        $this->assertEquals(['howdy' => ['hello' => ['greetings' => ['salutations', 'good days']]]], $arr);
+        $result = Arr::safeAppend($arr, 'howdy', 'hello', 'greetings', 'salutations');
+        $this->assertEquals(['howdy' => ['hello' => ['greetings' => ['salutations']]]], $result);
+        $result = Arr::safeAppend($result, 'howdy', 'hello', 'greetings', 'good days');
+        $this->assertEquals(['howdy' => ['hello' => ['greetings' => ['salutations', 'good days']]]], $result);
     }
 
     public function testSafelySets()
     {
         $arr = [];
-        Arr::safeSet($arr, 'howdy', 'hello');
-        $this->assertEquals(['howdy' => 'hello'], $arr);
+        $result = Arr::safeSet($arr, 'howdy', 'hello');
+        $this->assertEquals(['howdy' => 'hello'], $result);
     }
 
     public function testSafelySetsDeeply()
     {
         $arr = [];
-        Arr::safeSet($arr, 'howdy', 'hello', 'greetings', 'salutations');
-        $this->assertEquals(['howdy' => ['hello' => ['greetings' => 'salutations']]], $arr);
-        Arr::safeSet($arr, 'howdy', 'hello', 'greetings', 'good days');
-        $this->assertEquals(['howdy' => ['hello' => ['greetings' => 'good days']]], $arr);
+        $result = Arr::safeSet($arr, 'howdy', 'hello', 'greetings', 'salutations');
+        $this->assertEquals(['howdy' => ['hello' => ['greetings' => 'salutations']]], $result);
+        $result = Arr::safeSet($arr, 'howdy', 'hello', 'greetings', 'good days');
+        $this->assertEquals(['howdy' => ['hello' => ['greetings' => 'good days']]], $result);
     }
 
 
     public function testSwapByKeys()
     {
         $arr = [1,2,3,4,5,6];
-        Arr::swapByKeys($arr, 1, 2);
-        $this->assertEquals([1,3,2,4,5,6], $arr);
+        $result = Arr::swapByKeys($arr, 1, 2);
+        $this->assertEquals([1,3,2,4,5,6], $result);
     }
 
     public function testMoveToFirstByKey()

@@ -36,14 +36,16 @@ class Arr
      * Converts array keys from underscore to lower camel case.
      *
      * @param array $array
+     * @return array
      */
-    public static function keysUnderscoreToLowerCamelCase(array &$array)
+    public static function keysUnderscoreToLowerCamelCase(array $array)
     {
-        $keys = array_keys($array);
+        $cloned = $array;
+        $keys = array_keys($cloned);
         array_walk($keys, function (&$x) {
             $x = Str::cCase($x);
         });
-        $array = array_combine($keys, array_values($array));
+        return array_combine($keys, array_values($cloned));
     }
 
 
@@ -58,18 +60,20 @@ class Arr
      *
      * @param array $array
      * @param callable $func Returns a new key
+     * @return array
      */
-    public static function walkKeysRecursive(array &$array, callable $func)
+    public static function walkKeysRecursive(array $array, callable $func)
     {
         $out = [];
-        foreach ($array as $key => $val) {
+        $cloned = $array;
+        foreach ($cloned as $key => $val) {
             $newKey = $func($key);
             if (is_array($val)) {
-                static::walkKeysRecursive($val, $func);
+                $val = static::walkKeysRecursive($val, $func);
             }
             $out[$newKey] = $val;
         }
-        $array = $out;
+        return $out;
     }
 
     /**
@@ -83,7 +87,8 @@ class Arr
     {
         $args = array_slice(func_get_args(), 1);
         $accessor = call_user_func_array([Obj::class, 'accessor'], $args);
-        return array_map($accessor, $array);
+        $cloned = $array;
+        return array_map($accessor, $cloned);
     }
 
 
@@ -99,12 +104,15 @@ class Arr
      * @param array $array
      * @param mixed $alphaKey
      * @param mixed $betaKey
+     * @return array
      */
-    public static function swapByKeys(array &$array, $alphaKey, $betaKey)
+    public static function swapByKeys(array $array, $alphaKey, $betaKey)
     {
-        $tmp = $array[$alphaKey];
-        $array[$alphaKey] = $array[$betaKey];
-        $array[$betaKey] = $tmp;
+        $cloned = $array;
+        $tmp = $cloned[$alphaKey];
+        $cloned[$alphaKey] = $cloned[$betaKey];
+        $cloned[$betaKey] = $tmp;
+        return $cloned;
     }
 
     /**
@@ -113,13 +121,15 @@ class Arr
      *
      * @param array $array
      * @param mixed $key
+     * @return array
      */
-    public static function moveToFirstByKey(array &$array, $key)
+    public static function moveToFirstByKey(array $array, $key)
     {
         if (!isset($array[$key])) return;
-        $val = $array[$key];
-        unset($array[$key]);
-        $array = array_merge([$key => $val], $array);
+        $cloned = $array;
+        $val = $cloned[$key];
+        unset($cloned[$key]);
+        return array_merge([$key => $val], $cloned);
     }
 
     /**
@@ -139,13 +149,14 @@ class Arr
      * @param mixed $key
      * @return array
      */
-    public static function sortBy(array &$array, $key)
+    public static function sortBy(array $array, $key)
     {
+        $cloned = $array;
         $accessor = Obj::accessor($key);
-        uasort($array, function ($a, $b) use ($accessor) {
+        uasort($cloned, function ($a, $b) use ($accessor) {
             return $accessor($a) < $accessor($b) ? -1 : 1;
         });
-        return $array;
+        return $cloned;
     }
 
     /**
@@ -161,7 +172,7 @@ class Arr
         $accessor = Obj::accessor($key);
         foreach ($array as $k => $v) {
             $group = $accessor($v);
-            Arr::safeSet($out, $group, $k, $v);
+            $out = Arr::safeSet($out, $group, $k, $v);
         }
         return $out;
     }
@@ -178,6 +189,8 @@ class Arr
      * - If $where return -1, then that breaks the loop and returns early.
      * - If $where returns true or equivalent to true, then that value is taken from the
      *   given $array and added to the result set.
+     *
+     * NOTE: This alters the given array.
      *
      * @param array $array
      * @param callable $where
@@ -218,23 +231,24 @@ class Arr
      */
     public static function find(array $array, callable $where, $callableArgs = Arr::KEY_VAL, $notFoundValue = -1)
     {
+        $cloned = $array;
         switch ($callableArgs) {
             case Arr::KEY_ONLY:
-                foreach ($array as $key => $val) {
+                foreach ($cloned as $key => $val) {
                     if ($where($key)) {
                         return $val;
                     }
                 }
                 break;
             case Arr::VAL_ONLY:
-                foreach ($array as $key => $val) {
+                foreach ($cloned as $key => $val) {
                     if ($where($val)) {
                         return $val;
                     }
                 }
                 break;
             case Arr::KEY_VAL:
-                foreach ($array as $key => $val) {
+                foreach ($cloned as $key => $val) {
                     if ($where($val, $key)) {
                         return $val;
                     }
@@ -258,31 +272,10 @@ class Arr
      */
     public static function findNot(array $array, callable $where, $callableArgs = Arr::KEY_VAL, $notFoundValue = -1)
     {
-        switch ($callableArgs) {
-            case Arr::KEY_ONLY:
-                foreach ($array as $key => $val) {
-                    if (!$where($key)) {
-                        return $val;
-                    }
-                }
-                break;
-            case Arr::VAL_ONLY:
-                foreach ($array as $key => $val) {
-                    if (!$where($val)) {
-                        return $val;
-                    }
-                }
-                break;
-            case Arr::KEY_VAL:
-                foreach ($array as $key => $val) {
-                    if (!$where($val, $key)) {
-                        return $val;
-                    }
-                }
-                break;
-        }
-
-        return $notFoundValue;
+        $newWhere = function () use ($where) {
+            return ! call_user_func_array($where, func_get_args());
+        };
+        return static::find($array, $newWhere, $callableArgs, $notFoundValue);
     }
 
     /**
@@ -323,7 +316,8 @@ class Arr
      */
     public static function findWithKey(array $array, callable $where)
     {
-        foreach ($array as $key => $val) {
+        $cloned = $array;
+        foreach ($cloned as $key => $val) {
             if ($where($key)) {
                 return $val;
             }
@@ -760,10 +754,11 @@ class Arr
      * @param null|mixed $value
      * @return array
      */
-    public static function safeAppend(array &$array, $index, $value = null)
+    public static function safeAppend(array $array, $index, $value = null)
     {
-        if (!isset($array[$index]) || !is_array($array[$index])) {
-            $array[$index] = [];
+        $cloned = $array;
+        if (!isset($cloned[$index]) || !is_array($cloned[$index])) {
+            $cloned[$index] = [];
         }
 
         // Handling nested values iteratively instead of recursively
@@ -773,7 +768,7 @@ class Arr
         $keys = array_slice($args, 1);
         $index = array_shift($keys);
         $lastValue = array_pop($keys);
-        $currentArray = &$array[$index];
+        $currentArray = &$cloned[$index];
         foreach ($keys as $key) {
             if (!isset($currentArray[$key]) || !is_array($currentArray[$key])) {
                 $currentArray[$key] = [];
@@ -782,7 +777,7 @@ class Arr
         }
 
         $currentArray[] = $lastValue;
-        return $array;
+        return $cloned;
     }
 
     /**
@@ -802,10 +797,11 @@ class Arr
      * @param null|mixed $value
      * @return array
      */
-    public static function safeSet(array &$array, $index, $value = null)
+    public static function safeSet(array $array, $index, $value = null)
     {
-        if (!isset($array[$index]) || !is_array($array[$index])) {
-            $array[$index] = [];
+        $cloned = $array;
+        if (!isset($cloned[$index]) || !is_array($cloned[$index])) {
+            $cloned[$index] = [];
         }
 
         // Handling nested values iteratively instead of recursively
@@ -815,7 +811,7 @@ class Arr
         $keys = array_slice($args, 1);
         $index = array_shift($keys);
         $lastValue = array_pop($keys);
-        $currentArray = &$array[$index];
+        $currentArray = &$cloned[$index];
         foreach ($keys as $key) {
             if (!isset($currentArray[$key]) || !is_array($currentArray[$key])) {
                 $currentArray[$key] = [];
@@ -824,7 +820,7 @@ class Arr
         }
 
         $currentArray = $lastValue;
-        return $array;
+        return $cloned;
     }
 
 
