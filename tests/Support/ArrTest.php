@@ -420,6 +420,19 @@ class ArrTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($res, $end);
     }
 
+    public function testGroupBy()
+    {
+        $start = [
+            'carol' => ['id' => 3, 'color' => 'red'],
+            'betty' => ['id' => 4, 'color' => 'blue'],
+            'anna'  => ['id' => 5, 'color' => 'red'],
+        ];
+        $grouped = Arr::groupBy($start, 'color');
+        $this->assertCount(2, $grouped['red']);
+        $this->assertCount(1, $grouped['blue']);
+        $this->assertEquals(4, $grouped['blue']['betty']['id']);
+    }
+
     /**
      * @param callable $callable
      */

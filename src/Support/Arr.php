@@ -18,16 +18,18 @@ class Arr
      * @param array $defaults
      * @param array $overrides
      * @param bool $strict If strict, then only the keys in $defaults will be merged from overrides
+     * @return array
      */
-    public static function defaults(array &$defaults, array $overrides = [], $strict = false)
+    public static function defaults(array $defaults, array $overrides = [], $strict = false)
     {
         if (!count($overrides)) {
-            return;
+            return [];
         }
         if ($strict) {
             $overrides = static::filterByKeys($overrides, array_keys($defaults));
         }
         $defaults = array_merge($defaults, $overrides);
+        return $defaults;
     }
 
     /**
@@ -42,20 +44,6 @@ class Arr
             $x = Str::cCase($x);
         });
         $array = array_combine($keys, array_values($array));
-    }
-
-
-
-
-    // SORTING ----------------------------------------------------------------------------
-
-    public static function sortBy(array &$array, $key)
-    {
-        $accessor = Obj::accessor($key);
-        uasort($array, function ($a, $b) use ($accessor) {
-           return $accessor($a) < $accessor($b) ? -1 : 1;
-        });
-        return $array;
     }
 
 
@@ -141,6 +129,40 @@ class Arr
     public static function flatten(array $array) {
         $out = [];
         array_walk_recursive($array, function($a) use (&$out) { $out[] = $a; });
+        return $out;
+    }
+
+    /**
+     * Use an accessor (property, method, or callable) to sort an array.
+     *
+     * @param array $array
+     * @param mixed $key
+     * @return array
+     */
+    public static function sortBy(array &$array, $key)
+    {
+        $accessor = Obj::accessor($key);
+        uasort($array, function ($a, $b) use ($accessor) {
+            return $accessor($a) < $accessor($b) ? -1 : 1;
+        });
+        return $array;
+    }
+
+    /**
+     * Use an accessor (property, method, or callable) to group an array.
+     *
+     * @param array $array
+     * @param mixed $key
+     * @return array
+     */
+    public static function groupBy(array $array, $key)
+    {
+        $out = [];
+        $accessor = Obj::accessor($key);
+        foreach ($array as $k => $v) {
+            $group = $accessor($v);
+            Arr::safeSet($out, $group, $k, $v);
+        }
         return $out;
     }
 
