@@ -143,6 +143,48 @@ class Date
     }
 
     /**
+     * @param \DateTime $one
+     * @param \DateTime $two
+     * @return bool
+     */
+    public static function hasSameMonth(\DateTime $one, \DateTime $two)
+    {
+        return $one->format('Y m') == $two->format('Y m');
+    }
+
+    /**
+     * @param \DateTime $one
+     * @param \DateTime $two
+     * @return bool
+     */
+    public static function hasSameYear(\DateTime $one, \DateTime $two)
+    {
+        return $one->format('Y') == $two->format('Y');
+    }
+
+    /**
+     * @param \DateTime $one
+     * @param \DateTime $two
+     * @return bool TRUE if $two->year > $one->year
+     */
+    public static function hasLaterYear(\DateTime $one, \DateTime $two)
+    {
+        return intval($two->format('Y')) > intval($one->format('Y'));
+    }
+
+    /**
+     * @param \DateTime $one
+     * @param \DateTime $two
+     * @return bool TRUE if $one->year > $two->year || ($one->year == $two->year && $one->month > $two->month)
+     */
+    public static function hasLaterMonth(\DateTime $one, \DateTime $two)
+    {
+        return static::hasLaterYear($one, $two) ||
+        (static::hasSameYear($one, $two) &&
+            intval($two->format('m')) > intval($one->format('m')));
+    }
+
+    /**
      * Copies just the date portion from one DateTime to another
      *
      * @param \DateTime $target
