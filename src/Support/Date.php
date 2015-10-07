@@ -185,6 +185,18 @@ class Date
     }
 
     /**
+     * @param \DateTime $one
+     * @param \DateTime $two
+     * @return bool
+     */
+    public static function hasLaterDay(\DateTime $one, \DateTime $two)
+    {
+        return static::hasLaterMonth($one, $two) ||
+        (static::hasSameMonth($one, $two) &&
+            intval($two->format('d')) > intval($one->format('d')));
+    }
+
+    /**
      * Copies just the date portion from one DateTime to another
      *
      * @param \DateTime $target
