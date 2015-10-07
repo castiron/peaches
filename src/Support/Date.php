@@ -29,9 +29,9 @@ class Date
     public static function monthStringToInteger($monthString, $format = 'n')
     {
         if (is_numeric($monthString)) {
-            return (int)$monthString;
+            return (int) $monthString;
         }
-        return (int)date_format(date_create("1 $monthString 2000"), $format);
+        return (int) date_format(date_create("1 $monthString 2000"), $format);
     }
 
     /**
@@ -44,7 +44,7 @@ class Date
         if (is_string($monthInteger) && in_array(strtolower($monthInteger), self::$months)) {
             return $monthInteger;
         }
-        return date_format(date_create("1/$monthInteger/2000"), $format);
+        return date_format(date_create("2000-$monthInteger-01"), $format);
     }
 
     /**
