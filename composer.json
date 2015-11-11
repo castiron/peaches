@@ -6,9 +6,7 @@
     "php": ">=5.5.9"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.7.*",
-    "dcramble/phpdoc-md": "dev-master",
-    "phpdocumentor/phpdocumentor": "2.*"
+    "phpunit/phpunit": "4.7.*"
   },
   "autoload": {
     "psr-4": {
